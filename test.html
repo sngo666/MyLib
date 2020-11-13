@@ -10,9 +10,20 @@
         <script type="text/javascript" language="javascript" src="src/sngolib-1.0.0.js"></script>
         <script>
             window.onload=function(){
-                console.log(`加密字符|${sngolib.encrypt('18819233362','3,7','+')}|`)
-                console.log(`加密字符|${sngolib.encryptUnstr('18819233362','3,7','+')}|`)
-                console.log(`|${sngolib.filterSpecialStr('Fuckdd_dd@!^^^23dd','','@!')}|`)
+                // console.log(`加密字符|${sngolib.encrypt('18819233362','3,7','+')}|`)
+                // console.log(`加密字符|${sngolib.encryptUnstr('18819233362','3,7','+')}|`)
+                // console.log(`|${sngolib.filterSpecialStr('Fuckdd_dd@!^^^23dd','','@!')}|`)
+               sngolib.alertObj(sngolib.clone({
+                        a: 2,
+                        b: {c: 2},
+                        c: {
+                            d: {
+                                e: 3,
+                                f: 4
+                                }
+                            },
+                        g: 10
+                }));
             }
         </script>
     </body>

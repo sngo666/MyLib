@@ -378,7 +378,116 @@ let sngolib =  (function(){
             return this.trimRight(result);
         },
 
+        /******************数组模块********************/
+        /**
+         * @description 数组去重
+         * @param {*} arr 
+         */
+        unique(arr){
+            return [...new Set(arr)];
+        },
 
+        /**
+         * @description 数组顺序打乱 
+         */
+        upset(arr){
+            for (let i=0; i<arr.length; i++ ){
+                let a = Math.random()*arr.length;
+                let b = Math.random()*arr.length;
+                let _item = arr[a];
+                arr[a] = arr[b];
+                arr[b] = _item;
+            }
+            return arr;
+        },
+
+
+        /**
+         * @description 求数组最大值
+         * @param {*} arr 
+         */
+        max(arr){
+            return Math.max(...arr);
+        },
+
+        /**
+         * @description 求数组最小值
+         * @param {*} arr 
+         */
+        min(arr){
+            return Math.min(...arr);
+        },
+
+        /**
+         * @description 数组求和
+         * @param {*} arr 
+         */
+        sum(arr){
+            return arr.reduce((sum, cur) => sum + cur);
+        },
+
+        /**
+         * @description 数组求平均数
+         * @param {*} arr 
+         */
+        average(arr){
+            return this.sum(arr) / arr.length;
+        },
+
+        /**
+         * @description 深拷贝
+         * @param {*} obj 
+         */
+        clone(obj){
+            const root = {};
+
+            const loopList = [{
+                parent: root,
+                key: undefined,
+                data: obj,
+
+            }];
+
+            while (loopList.length){
+                let node = loopList.pop();
+                let par = node.parent;
+                let k = node.key;
+                let dat = node.data;
+
+                res = par;
+                if (typeof k !== 'undefined'){
+                    res = par[k] = {};
+                }
+
+                for (let _item in dat){
+                    if (dat.hasOwnProperty(_item)){
+                        if (typeof dat[_item] === 'object'){
+                            loopList.push({
+                                parent: res,
+                                key: _item,
+                                dat: dat[_item]
+                            });
+                        }
+                        else res[_item] = dat[_item];
+                    }
+                }
+            }
+            return root;
+
+        },
+
+        /**
+         * @description 输出对象
+         * @param {*} obj 
+         */
+        alertObj(obj){
+            var str="";
+            for (var item in obj){
+                str +=item+":"+obj[item]+"\n";
+            }
+            alert(str);
+        },
+        
     };
 
 })();
