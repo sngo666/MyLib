@@ -480,12 +480,14 @@ let sngolib =  (function(){
          * @description 输出对象
          * @param {*} obj 
          */
-        alertObj(obj){
-            var str="";
+        alertObj(obj, str=""){
             for (var item in obj){
-                str +=item+":"+obj[item]+"\n";
+                if (typeof obj[item] === 'object'){
+                    str += item+":" + "{ " +this.alertObj(obj[item])+" }";;
+                } 
+                else str += item+":"+obj[item]+" ";
             }
-            alert(str);
+            return str;
         },
         
     };
