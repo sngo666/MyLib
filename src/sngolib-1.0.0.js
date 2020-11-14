@@ -487,8 +487,106 @@ let sngolib =  (function(){
                 } 
                 else str += item+":"+obj[item]+" ";
             }
-            return str;
+            return (str);
         },
+
+
+        /**
+         * 
+         * @description 随机取数
+         * @param {*} arr 
+         * @param {*} num 
+         * @returns {arr|number}
+         */
+        getRandom(arr, num = 1, repeatable = 0){
+            let ranArr = [], _arr = arr;
+            for (let i=0; i<num; i++){
+                ranArr.push(arr[(Math.random() * _arr.length).toFixed]);
+                if (repeatable == 0) {
+                    let key = this.getKey(_arr, ranArr[i]);
+                    if (typeof key !== "number" && key != -1){
+                        for (item of key){
+                            _arr.splice(item, 1);
+                        }
+                    }
+                }  
+            } 
+            return num > 1 ? ranArr:ranArr[0]; 
+        },
+
+        /**
+         * @description 获取数组中指定键值的索引号,没有则返回-1
+         * @param {*} arr 
+         * @param {*} data 
+         */
+        getKey(arr, data){
+            let _arr = arr, result = [];
+            for (let i=0; i<_arr.length; i++){
+                if (_arr[i] == data){
+                    result.push(i);
+                }
+            }
+            return result.length>0 ? result : -1;
+        },
+
+        /**
+         * @description 获取数组中每（某）一个元素的重复度
+         * @param {*} arr 
+         * @param {*} number 
+         */
+        getCount(arr, number){
+            let _arr = arr, 
+                result = [],
+                obj;
+            for (_item of _arr){
+                if (obj[_item]){
+                    obj[_item]++;
+                }
+                else opj[_item] = 1;
+            }
+            for (o in obj){
+                result.push({el:o, count: obj[o]});
+            }
+            return number ? result[number] : result;
+
+        },
+
+        /**
+         * @description 返回删除了指定键值之后的数组
+         * @param {*} arr 
+         * @param {*} value 
+         */
+        removeArrayByValue(arr, value){
+            return arr.filter(item => item !== value);
+        },
+
+        /**
+         * @description 返回删除包含指定值的元素之后的数组
+         * @param {*} arr 
+         * @param {*} value 
+         */
+        removeArrayByLike(arr, value){
+            return arr.filter(item => item.indexOf(value) === -1);
+        },
+
+
+        /**
+         * @description 排除对象某些项
+         */
+        filterKey(obj, keys){
+            let _obj = {};
+            let _keys = keys.split(',');
+            for (let key in obj){
+                if (_keys.indexOf(key) === -1){
+                    _obj[key] = obj[key];
+                }
+            }
+            return _obj;
+        },
+
+
+        
+
         
     };
 
