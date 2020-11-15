@@ -571,6 +571,7 @@ let sngolib =  (function(){
 
 
         /**
+         * @todo 以递归形式尝试重写
          * @description 排除对象某些项
          */
         filterKey(obj, keys){
@@ -585,9 +586,101 @@ let sngolib =  (function(){
         },
 
 
-        
+        /**
+         * @description 数组扁平化
+         * @param {*} arr 
+         */
+        steamroller(arr){
+            let flattened = [].concat(...arr);
+            return flattened.some(item => Array.isArray(item)) ? this.steamroller(flattened) : flattened;
+        },
 
-        
+        /**
+         * @description 切割数组
+         */
+        cut(arr, num){
+             let result = [];
+             for (let i=0; i<arr.length; i+=num){
+                result.push(arr.slice(i, i + num));
+            }
+            return result;
+        },
+
+
+
+        /**
+         * @description 快速排序
+         * @param {*} arr 
+         */
+        qsort(arr){
+            if(arr.length <= 1){
+                return arr;
+            }
+
+            let right = [],
+                left = [];
+            let index = arr[(arr.length / 2).toFixed];
+
+            for (let i=0; i<arr.length; i++){
+                if (arr[i] < index){
+                    right.push(arr[i]);
+                }
+                else{
+                    left.push(arr[i]);
+                }
+            }
+            return qsort(right).concat(index, qsort(left));
+        },
+
+
+
+        /*****************************对象模块********************************* */
+
+        /**
+         * @description 时间倒计时折算，单位ms
+         * 
+         */
+        getTime(endTime){
+            let t = +new Date(endTime) - +new Date();
+            let d = 0,
+                h = 0,
+                m = 0,
+                s = 0;
+            if (t >= 0){
+                d = Math.floor(t / 1000 / 3600 / 24);
+                h = Math.floor(t / 1000 / 3600 % 24);
+                m = Math.floor(t / 1000 / 60 % 60);
+                s = Math.floor(t / 1000 % 60);
+            }
+            return {d, h, m, s};
+        },
+
+        /**
+         * @description 时间格式化
+         * @param {*} date 
+         * @param {*} fmt 
+         */
+        formatDate(date, fmt = "yyyy-MM-DD hh:mm:ss"){
+            let _date = new Date(date),
+                _fmt = fmt;
+            let o = {
+                "M+": _date.getMonth() + 1,
+                "d+": _date.getDate(),
+                "h+": _date.getHours(),
+                "m+": _date.getMinutes(),
+                "s+": _date.getSeconds()
+            }
+       
+            if (/(y+)/.test(_fmt)){
+                _fmt = _fmt.replace(RegExp.$1, (_date.getFullYear(_date) + "").substr(4 - RegExp.$1.length));
+            }
+            for (let obj in o){
+                if (new RegExp("(" + obj + ")").test(_fmt)){
+                    _fmt = _fmt.replace(RegExp.$1, ((RegExp.$1.length === 1) ? o[k] : ("00" + o[obj]).substr(("" + o[obj].length))))
+                }
+            }
+            return _fmt;
+         },
     };
 
 })();
