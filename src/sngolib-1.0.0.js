@@ -41,7 +41,7 @@ let sngolib =  (function(){
     }
 
     return {
-        /**
+        /**@todo 完成扩展函数配置函数
          * @description 扩展函数配置
          */
         extend:{
@@ -681,6 +681,77 @@ let sngolib =  (function(){
             }
             return _fmt;
          },
+         /**
+          * @description 获得随机颜色
+          * @param {*} sum
+          */
+        getRandomColor(sum){
+            if (sum) {
+                return '#' + Math.random().toString(16).substring(2).substr(0, 6);
+            }
+            else{
+                return 'rgb(' + this.getRandom(255) + ',' + this.getRandom(255) + ',' + this.getRandom(255) + ')';
+            }
+        },
+
+         /**
+          * @description 随机获取给定区间内的一个数字，若无参数则给定1000w以内的一个数
+          * @param {*} n1 
+          * @param {*} n2 
+          */
+        getRandomNumber(n1, n2){
+            switch(arguments.length){
+                case 2:
+                    return n1>=n2 ? Math.round(Math.random * (n1 - n2) + n2) : Math.round(Math.random * (n2 - n1) + n1);
+                case 1:
+                    return Math.round(Math.random() * n1);
+                default:
+                    return Math.round(Math.random() * 10000000);
+            }
+        },
+
+        /**
+         * @description 设置url参数
+         * @param {*} url 
+         * @param {*} obj 
+         */
+        setUrlParam(url, obj){
+            let _rs = [];
+            for (let p in obj){
+                if (obj[p] !== null && obj[p] !== '' && obj[p] !== undefined){
+                    _rs += p + '=' + obj[p];
+                }
+            }
+            return  url+ '?' + _rs.join('&');
+        },
+
+        /**
+         * @description 获取url参数
+         * @param {*} url 
+         */
+        getUrlParam(url = window.location.href){
+            let _param = url.substring(url.indexOf('?')).split('&'),
+                pos,
+                _rs = {};
+            for (o of _param){
+                pos = o.split('=');
+                if (pos.length == 2){
+                    _rs[pos[0]] = pos[1];
+                }
+            }
+            return _rs;
+        },
+
+
+        /**
+         * @description 过滤掉对象中键值为空的属性
+         * @param {*} obj 
+         * @param {*} clearValue 
+         */
+        clearKeys(obj, clearValue = [null, undefined, '']){
+
+        }
+
     };
 
 })();
