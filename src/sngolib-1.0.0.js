@@ -749,8 +749,20 @@ let sngolib =  (function(){
          * @param {*} clearValue 
          */
         clearKeys(obj, clearValue = [null, undefined, '']){
+            clearValue.forEach((item, index) => {
+                clearValue[index] = Number.isNaN(item) ? 'NaN' : item
+            });
+            let rs = {};
+            for (let key in obj){
+                if (!this.checkValue(objp[key], clearValue)){
+                    rs[key] = objp[key];
+                }
+            }
+            return rs;
+        },
 
-        }
+
+        
 
     };
 
