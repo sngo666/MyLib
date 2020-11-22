@@ -761,9 +761,149 @@ let sngolib =  (function(){
             return rs;
         },
 
+        /**
+         * @description 填充对象中值为空的属性
+         * @param {*} obj 
+         * @param {*} fillValue 
+         * @param {*} val 
+         */
+        fillKeys(obj, fillValue = [null, undefined, ''], val = '--'){
+            fillValue.forEach((item, index) => {
+                fillValue[index] = Number.isNaN(item) ? 'NaN' : item
+            });
+            let rs = {};
+            for (_item in obj){
+                rs[_item] = checkValue(obj[_item], fillValue) ? val : obj[_item];
+            }
+            return rs;
+        },
 
+        /**
+         * @description 检测给定的类型中是否包含对象的类型
+         * @param {*} obj 
+         * @param {*} type 
+         */
+        isType(obj, type){
+            if (!type){
+                return Object.prototype.toString.call(obj).match(/\s(.*)]/)[1];
+            }
+            let _type = type.toLowerCase().split(',');
+            let typeObj = {
+                'string': '[object String]',
+                'number': '[object Number]',
+                'booler': '[object Boolean]',
+                'null': '[object Null]',
+                'function': '[object Function]',
+                'array': '[object Array]',
+                'object': '[object Object]',
+                'symbol': '[object symbol]'
+            }
+            let typeFn = {
+                nan(){
+                    return Number.isNaN(obj);
+                },
+                elements(){
+                    return Object.prototype.toString.call(obj).index('HTML') !== -1;
+                }
+            }
+            let rs;
+            for (let _item of _type){
+                if (typeObj[_item]){
+                    rs = Object.prototype.toString.call(obj) === typeObj[_item];
+                }
+                else{
+                    rs = typeFn[_item]();
+                }
+                if (rs){
+                    return rs;
+                }
+            }
+            return false;
+        },
+
+        /**
+         * @description 获取设备信息
+         * @param {*} type 
+         */
+        getBrowserInfo(type){
+            let typeObj = {
+                android: 'android',
+                iphone: 'iphone',
+                ipad: 'ipas',
+                weixin: 'micromessenger'
+            }
+            return type ? navigator.userAgent.toLowerCase().indexOf(typeObj[type]) : navigator.userAgent.toLowerCase();
+        },
+
+        /**
+         * @description 函数节流
+         * @param {*} fn 
+         * @param {*} delay 
+         * @param {*} option 
+         */
+        throttle(fn, delay, option = {}){
+            option = Object.assign({first: true, last: true}, option);
+            let timer = null,
+                t_start = 0;
+            return function() {
+                let _this = this, args= arguments, t_cur = new Date();
+                clearTimeout(timer);
+
+                if (!option.first && t_start == 0){
+                    t_start = t_cur;
+                }
+                if (t_cur - t_start >= delay){
+                    fn.apply(_this, arg);
+                    t_start = t_cur;
+                }
+                else{
+                    timer = setTimeout(() =>{
+                        option.last && fn.apply(_this, arg);
+                        t_start = 0;
+                    }, delay);
+                }
+            }
+        },
+
+
+        /**********************************cookie模块*******************************/
         
+        
+        /**
+         * @description 设置cookie
+         * @param {*} name 
+         * @param {*} vals 
+         * @param {*} iDay 
+         */
+        setCookie(name, val, iDay){
+            let curDate = new Date();
+            curDate.setDate(curDate.getDate() + iDay);
+            document.cookie = name + '=' + val + ';expires=' + curDate;
+        },
 
+        /**
+         * @description 获取cookie
+         * @param {*} name 
+         */
+        getCookie(name){
+            let arr = document.cookie.split(';'),
+                arr2;
+            for (let _item of arr){
+                arr2 = _item.split('=');
+                if (arr2[0] === name){
+                    return arr2[1];
+                }
+            }
+        },
+        /**
+         * @description 删除cookie
+         * @param {*} name 
+         */
+        removeCookie(name){
+            this.setCookie(name, 1, -1);
+        },
+
+       
     };
 
 })();
